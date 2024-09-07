@@ -1,7 +1,30 @@
 ---
 title: "TP1"
+jupyter: python3
 ---
 
-## Quarto
+#Q1
+Les fonctions rand_tri_gauss, rand_clown et rand_checkers génères des donnée labelisé suivant différente methodologie,
+elles restituent toutes un tableau d'individue X (n lignes et 2 colones) et leur label y (n lignes et 1 colonnes).
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+- rand_tri_gauss : 3 échantillons de n1,n2 et n3 données sont générées independament, de loi gaussienne disctinct (mu 1,2,3 et sigma 1,2,3) et sont
+labelisée en trois groupe ( un groupe par loi ), empilé en un vecteur colones (à n1 + n2 +n3 lignes et 2 colonnes), puis permuté et restituer.
+
+- rand_clown : les échantilon sont ici généré en 1 dimentions :
+    - x0 est généré comme : un échantillons de n1 tirage issu d'une loi gaussienne
+    - x1 est généré comme : x0^2 + une constante sigma1 * un echantillon de n2 tirage loi gaussienne
+    - C est généré comme : une constante sigma2 * un echantillon de n2 tirage loi gaussienne
+
+    la concatenation [x0,x1] est empilée a x2 = [C,C+2] en un vecteur colones (ie à n1 + n2 lignes et 2 colonnes),labelisé en 2 groupe ([x0,x1], x2)
+    puis permuté et restituer.
+
+- rand_checkers :
+    - on considère nbp = int(np.floor(n1 / 8)) et nbn = int(np.floor(n2 / 8)) ou n1 et n2 sont le nombre d'individus de deux classes distinct.
+    - alors, on génère (nbp + nbn) * 16) tirages de loi uniforme (0,1) en une liste, que l'on ordonne en un tableau #xapp# de dimentions [(nbp + nbn) * 8, 2]
+        - pour cette trasformation (d'une liste (n,1) ver un tableau (d1,d2),
+        #np.reshape# par default empilent les termes de la liste dans l'odre de la lecture par paquet de d2 termes. ( ie [1,2,3,4] -> [[1,2],[3,4]] par exemples)
+    - Flem de fair le reste pour l'instant x)
+
+```{python}
+
+```
