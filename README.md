@@ -5,7 +5,7 @@ Le Code est disponible dans \Code , et le projet quarto avec fichier et image qu
 
 Dans ce TP, on a suivi les scripts de référence pour explorer l'impact de la régularisation, des variables de nuisance et de la réduction de dimension via l'Analyse en Composantes Principales (PCA) sur les performances d'un modèle SVM.
 
-Des modifications ont été apportées aux scripts originaux, et les justifications de ces ajustements sont discutées en annexe en en commentaire du code lui même.
+Des modifications ont été apportées aux scripts originaux, et les justifications de ces ajustements sont discutées en fin du rapport, et en en commentaire du code lui même.
 
 ## Les principaux objectifs de ce travail pratique sont :
 
