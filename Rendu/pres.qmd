@@ -2,11 +2,15 @@
 title: "Support Vector Machine"
 format: pdf
 jupyter: python3
+author: Gaggini Lorenzo
+Date : 01/10/2024
 ---
 
 `Dans ce travail pratique, On se réfère aux scripts de référence fournis pour explorer l'impact des paramètres de régularisation et des variables de nuisance dans un modèle SVM.`
+
 `Cependant, des modifications ont été apportées aux scripts originaux afin d'améliorer l'analyse et de restituer un code coherent` 
-`Les détails de ces modifications, ainsi que les justifications des choix effectués, sont discutés dans un miscellanées en annexe pour une meilleure compréhension de leur influence sur les résultats.`
+
+`Les détails de ces modifications, ainsi que les justifications des choix effectués, sont discutés dans un miscellanées en annexe pour une meilleure compréhension de leur influence sur les résultats. On pourra consulter le code commenté lui même pour encore plus de détailles.`
 
 
 \newpage
@@ -229,9 +233,9 @@ Un solution envisageable à l'existence de donnée parasite est La réduction de
 
 ## 3.2 PCA
 
-Dans cette dernière partie du travail pratique, on se concentre sur l'utilisation de l'Analyse en Composantes Principales (PCA) pour réduire la dimensionnalité des données, cette fois sans ajouter de bruit.
+Dans cette dernière partie du travail pratique, on se concentre sur l'utilisation de l'Analyse en Composantes Principales (PCA) pour réduire la dimensionnalité des données.
 Cette technique permet non seulement d'améliorer l'efficacité des algorithmes d'apprentissage, mais aussi de minimiser le risque de surapprentissage en éliminant les redondances et les corrélations superflue entre les variables. 
-On applique la PCA sur 20 composente sur le jeu de données avec 40 000 variable de nuisance (signial initial dilué a 0.2) pour observer comment la réduction de dimension affecte les performances du SVM.
+On applique la PCA sur 20 composente sur le jeu de données avec 40 000 variable de nuisance gaussiennes centrée réduite (signial initial dilué a 0.2) pour observer comment la réduction de dimension affecte les performances du SVM.
 
 2 solveur on étaient tester, voici leur résultat :
 
@@ -258,9 +262,21 @@ Cross validate Test scores:  0.8210526315789474
 ```
 C'est bien évidemment attendu, le solveur randomized étant très mal adapté au protocole proposé ici, où le choix a été fait de noyer le signal dans le bruit. En utilisant le solveur classique (qui est bien moins rapide que le randomisé), on un gain significatif à l'emploi de la PCA sur les données bruitées. 
 
-# 0. annexe
+# 0. Annexe
 
-## 0.1 code_snippet
+
+## 0.1 Miscellanées 
+
+* J'ai modifié le script d'origine assez radicalement en raison de l'instruction suivante : `X_noisy = X_noisy[np.random.permutation(X.shape[0])].`
+  Cette ligne de code mélange aléatoirement les lignes de X_noisy, ce qui altère la structure et la relation entre les données.
+  Dans le cadre de cette analyse, on souhaite juger de l'impact de l'ajout de variables de nuisance sur le modèle SVM. En permutant les lignes, on fausse grandement les résultats et la comparaison est impossible. 
+  Je ne sais pas s'il s'agit d'une erreur, d'un piège, ou si j'ai simplement pas su comprendre la structure attendue, j'ai donc choisie de la retirer.
+ 
+* J'ai choisi délibérément de prendre un nombre trés grand de variable de nuisances pour dillué le signial initial de X, bien que le code laisser suggéré une échelle plus petite (300 variables), j'ai trouver qu'il était interressant de traité la question sous cette aproches
+
+*  J'ai remplacer `astype(np.int)` par `astype(int)`, `np.int` est déprécier.(voir https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations)
+
+* J'ai retiré la section `Toyset` du code, elle contien des exemples bien utiles mais superflue pour le rendu final.
 
 ::: {#lst-1 lst-cap="Linear and Polynomial SVC"}
 ```python
@@ -318,7 +334,8 @@ for i in range(1, 5,1):
     X_noisy = np.concatenate((X, noise), axis=1)
 
     print("--------------------------------------------------")
-    print("Score avec ",i*10000," variable de nuisance de variance :",sigma,", signal dilué a :",1/(1+i)," \n")
+    print("Score avec ",i*10000," variable de nuisance de variance :"
+    ,sigma,", signal dilué a :",1/(1+i)," \n")
     run_svm_cv(X_noisy, y, random_seed=seed)
 ```
 
@@ -335,18 +352,10 @@ for i in range(1, 5,1):
     X_noisy = np.concatenate((X, noise), axis=1)
 
     print("--------------------------------------------------")
-    print("Score avec ",10000," variable de nuisance de variance ",sigma,", signal initial dilué a :",0.5," \n")
+    print("Score avec ",10000," variable de nuisance de variance "
+    ,sigma,", signal initial dilué a :",0.5," \n")
     run_svm_cv(X_noisy, y, random_seed=seed)
 ```
 
 :::
 
-## 0.1 Miscélénaire
-
-* J'ai modifié le script d'origine en raison d'une erreur fondamentale dans l'instruction suivante : `X_noisy = X_noisy[np.random.permutation(X.shape[0])].` 
-Cette ligne de code mélange aléatoirement les lignes de X_noisy avant l'ajout de bruit, ce qui altère la structure et la relation entre les données. 
-Dans le cadre de cette analyse, on souhaite juger de l'impact de l'ajout de variables de nuisance sur le modèle SVM. En permutant les lignes, on fausse grandement les résultats et la comparaison est impossible. 
-
-*  j'ai remplacer `astype(np.int)` par `astype(int)`, `np.int` est déprécier. ( voir https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations)
-
-* j'ai retiré la section `Toyset` du code, elle contien des exemples bien utiles mais superflue pour le rendu final.
