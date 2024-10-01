@@ -43,7 +43,7 @@ clf_l_grid=GridSearchCV(SVC(), parameters_linear,n_jobs=-1)
 clf_l_grid.fit(X_train, y_train)
 clf_l=clf_l_grid.best_estimator_
 
-Cs = list(np.logspace(-3, 3, 5)) # 5 valeurs de à tester C suffisent, j'ai tester avec plus mais on est déja tres proche de la solution optimale
+Cs = list(np.logspace(-3, 3, 5)) # 5 valeurs de C à tester suffisent, j'ai tester avec plus mais on est déja tres proche de la solution optimale
 gammas = 10. ** np.arange(1, 2)
 degrees = np.r_[1, 2, 3]
 parameters_polynomial = {'kernel': ['poly'], 'C': Cs, 'gamma': gammas, 'degree': degrees}
@@ -52,7 +52,8 @@ clf_p_grid.fit(X_train, y_train)
 clf_p=clf_p_grid.best_estimator_
 
 
-n=1 # nombre de répétitions pour faire la moyenne (j'ai laiser 1 mais les résultats du rapport sont pour n=10)')
+n=1 # nombre de répétitions pour faire la moyenne (j'ai laiser 1 pour le plot, mais les résultats du rapport sont pour n=10), 
+# dans les deux cas c'est le dernier estimateur qui sera plot)
 
 # on aurait pu utiliser une cross validation mais je voulais avoir les paramètres optimaux pour chaque répétition
 # et j'ai pas eu de bonne idée pour proprement.
@@ -252,7 +253,7 @@ seed=1
 
 print("Score sans variable de nuisance\n")
 run_svm_cv(X, y, random_seed=seed)
-#On ajoute des variables de nuisances centrées
+#On ajoute des variables de nuisances réduites
 for i in range(1, 5,1):
     np.random.seed(seed)
     X_noisy = []
@@ -263,7 +264,7 @@ for i in range(1, 5,1):
     print("Score avec ",i*10000," variable de nuisance de variance :",sigma,", signal dilué a :",1/(1+i)," \n")
     run_svm_cv(X_noisy, y, random_seed=seed)
 
-#on ajoute des variables de nuisances non centrées
+#on ajoute des variables de nuisances non réduite
 print("Score sans variable de nuisance\n")
 run_svm_cv(X, y, random_seed=seed)
 for i in range(1, 5,1):
